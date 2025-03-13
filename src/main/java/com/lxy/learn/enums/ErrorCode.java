@@ -31,6 +31,15 @@ public enum ErrorCode {
 
     UNKNOWN_ERROR(99999999, "未知错误"),
     ;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     private final Integer code;
 
     private final String message;

@@ -3,6 +3,7 @@ package com.lxy.learn.service.impl;
 import com.lxy.learn.exception.LxyBusinessException;
 import com.lxy.learn.request.system.SystemUserLogin;
 import com.lxy.learn.service.TestService;
+import org.springframework.stereotype.Service;
 
 /**
  * 给李晓玉大美女做的测试方法类
@@ -11,6 +12,7 @@ import com.lxy.learn.service.TestService;
  * @Date 2025/3/12 18:44
  * @Version 1.0
  */
+@Service
 public class TestServiceImpl implements TestService {
     @Override
     public Boolean systemUserLogin(SystemUserLogin request) {
