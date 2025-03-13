@@ -1,0 +1,29 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  application:
+    name: lxy
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+    servlet:
+      path: /lxy
+  datasource:
+    postgres:
+      jdbc-url: jdbc:postgresql://127.0.0.1:5432/probe
+      username: postgres
+      password: jeremy_song
+      driver-class-name: org.postgresql.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        minimum-idle: 3
+        auto-commit: true
+        idle-timeout: 10000
+        pool-name: IsmHikariCP
+        max-lifetime: 1800000
+        connection-timeout: 30000
