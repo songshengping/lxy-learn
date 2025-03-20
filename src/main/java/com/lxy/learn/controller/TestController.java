@@ -1,6 +1,6 @@
 package com.lxy.learn.controller;
 
-import com.lxy.learn.request.system.SystemUserLogin;
+import com.lxy.learn.request.user.SystemUserLogin;
 import com.lxy.learn.response.Response;
 import com.lxy.learn.service.TestService;
 import org.springframework.web.bind.annotation.PostMapping;

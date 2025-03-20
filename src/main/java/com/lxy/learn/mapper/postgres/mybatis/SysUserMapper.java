@@ -1,6 +1,9 @@
 package com.lxy.learn.mapper.postgres.mybatis;
 
+import com.lxy.learn.dao.user.UserQueryModel;
 import com.lxy.learn.model.entity.postgres.SysUserEntity;
+
+import java.util.List;
 
 public interface SysUserMapper {
     /**
@@ -50,4 +53,6 @@ public interface SysUserMapper {
      * @mbg.generated Thu Mar 13 15:45:16 CST 2025
      */
     int updateByPrimaryKey(SysUserEntity row);
+
+    List<SysUserEntity> querySysUserByQueryModel(UserQueryModel queryModel);
 }

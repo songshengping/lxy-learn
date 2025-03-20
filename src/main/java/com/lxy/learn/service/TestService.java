@@ -1,6 +1,6 @@
 package com.lxy.learn.service;
 
-import com.lxy.learn.request.system.SystemUserLogin;
+import com.lxy.learn.request.user.SystemUserLogin;
 
 /**
  * 给李晓玉大美女做的测试方法类
@@ -12,4 +12,5 @@ import com.lxy.learn.request.system.SystemUserLogin;
 public interface TestService {
 
     Boolean systemUserLogin(SystemUserLogin request);
+
 }

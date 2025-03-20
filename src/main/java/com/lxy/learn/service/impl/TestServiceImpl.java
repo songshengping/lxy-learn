@@ -1,7 +1,7 @@
 package com.lxy.learn.service.impl;
 
 import com.lxy.learn.exception.LxyBusinessException;
-import com.lxy.learn.request.system.SystemUserLogin;
+import com.lxy.learn.request.user.SystemUserLogin;
 import com.lxy.learn.service.TestService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class TestServiceImpl implements TestService {
     @Override
     public Boolean systemUserLogin(SystemUserLogin request) {
+        // 参数写死在代码中判断
         if (request.getUsername().equals("admin") && request.getPassword().equals("123456")) {
             return true;
         } else {

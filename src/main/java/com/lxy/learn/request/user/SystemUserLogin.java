@@ -1,4 +1,4 @@
-package com.lxy.learn.request.system;
+package com.lxy.learn.request.user;
 
 import lombok.Data;
 

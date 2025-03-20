@@ -17,6 +17,7 @@ public enum ErrorCode {
     ERROR(1, "失败"),
     /* 通用异常 10000001-10000100 */
     PARAM_ERROR(10000001, "参数错误"),
+    PARAM_EMPTY_ERROR(100000013, "必填参数不能为空"),
     ILLEGAL_STATE(10000002, "状态错误"),
     ENCRYPT_ERROR(10000003, "加密失败"),
     DECRYPT_ERROR(10000004, "解密失败"),
