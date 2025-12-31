@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>元旦快乐 ✨</title>
+  <style>
+    :root{
+      --bg1:#070A12;
+      --bg2:#0B1532;
+      --neon1:#7C4DFF;
+      --neon2:#00E5FF;
+      --neon3:#FF2DAA;
+      --text:#EAF2FF;
+      --muted:#A7B5D6;
+      --glass: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.16);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial;}
+    body{
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 20% 20%, rgba(124,77,255,.25), transparent 60%),
+                  radial-gradient(900px 700px at 80% 30%, rgba(0,229,255,.18), transparent 55%),
+                  radial-gradient(900px 700px at 50% 90%, rgba(255,45,170,.16), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+
+    /* soft aurora ribbons */
+    .ribbon{
+      position:absolute; inset:-30% -20%;
+      background: conic-gradient(from 230deg, rgba(124,77,255,.0), rgba(124,77,255,.25), rgba(0,229,255,.22), rgba(255,45,170,.18), rgba(124,77,255,.0));
+      filter: blur(40px);
+      opacity:.9;
+      animation: spin 16s linear infinite;
+      transform-origin:center;
+    }
+    .ribbon:nth-child(2){animation-duration:22s; opacity:.65; filter:blur(60px)}
+    .ribbon:nth-child(3){animation-duration:28s; opacity:.45; filter:blur(70px)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* canvases */
+    canvas{position:absolute; inset:0; width:100%; height:100%;}
+    #stars{opacity:.9}
+    #fireworks{pointer-events:none}
+
+    /* layout */
+    .wrap{
+      position:relative;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      z-index:2;
+    }
+    .card{
+      width:min(980px, 94vw);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      border-radius:24px;
+      padding:28px 26px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position:relative;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(90deg, rgba(124,77,255,.0), rgba(124,77,255,.35), rgba(0,229,255,.35), rgba(255,45,170,.35), rgba(124,77,255,.0));
+      filter: blur(18px);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .grid{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:20px;
+    }
+    @media (max-width: 880px){
+      .grid{grid-template-columns:1fr; gap:16px}
+    }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.4px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.3) 40%, rgba(0,229,255,.8) 65%, rgba(0,229,255,.0) 72%);
+      box-shadow: 0 0 18px rgba(0,229,255,.75);
+    }
+
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      letter-spacing:-.8px;
+      text-shadow: 0 0 24px rgba(124,77,255,.22);
+    }
+    .neon{
+      background: linear-gradient(90deg, var(--neon1), var(--neon2), var(--neon3));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      filter: drop-shadow(0 0 22px rgba(0,229,255,.18));
+    }
+    .sub{
+      margin:0 0 16px;
+      font-size:16px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .count{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .pill{
+      flex:1 1 110px;
+      min-width:110px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:12px 12px;
+      text-align:center;
+    }
+    .pill b{
+      display:block;
+      font-size:28px;
+      letter-spacing:.5px;
+    }
+    .pill span{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    .right{
+      position:relative;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:20px;
+      padding:18px 16px;
+      background: rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+    .right:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(0,229,255,.20), transparent 55%),
+                  radial-gradient(circle at 70% 40%, rgba(255,45,170,.18), transparent 55%),
+                  radial-gradient(circle at 55% 75%, rgba(124,77,255,.16), transparent 55%);
+      filter: blur(18px);
+      opacity:.9;
+    }
+    .right > *{position:relative; z-index:1}
+
+    .wish{
+      font-size:18px;
+      line-height:1.8;
+      margin:0 0 10px;
+    }
+    .sig{
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      display:flex; align-items:center; gap:10px;
+    }
+
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;
+    }
+    button{
+      appearance:none; border:0;
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:700;
+      color:#071022;
+      background: linear-gradient(90deg, var(--neon2), var(--neon1), var(--neon3));
+      box-shadow: 0 18px 40px rgba(0,229,255,.16);
+      transition: transform .12s ease, filter .12s ease;
+      min-height:44px;
+    }
+    button:hover{transform: translateY(-1px); filter: brightness(1.07)}
+    .ghost{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow:none;
+      font-weight:650;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color:rgba(231,243,255,.75);
+      user-select:none;
+    }
+
+    /* floating sparkles */
+    .spark{
+      position:absolute;
+      width:6px; height:6px; border-radius:50%;
+      background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,.0) 70%);
+      opacity:.8;
+      filter: drop-shadow(0 0 12px rgba(0,229,255,.35));
+      animation: floatUp linear infinite;
+      pointer-events:none;
+      z-index:1;
+    }
+    @keyframes floatUp{
+      from{transform: translateY(30px) scale(.9); opacity:0}
+      10%{opacity:.85}
+      to{transform: translateY(-120vh) scale(1.2); opacity:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="ribbon"></div>
+  <div class="ribbon"></div>
+  <div class="ribbon"></div>
+
+  <canvas id="stars"></canvas>
+  <canvas id="fireworks"></canvas>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="grid">
+        <div>
+          <div class="badge"><span class="dot"></span><span id="todayText">新年模式启动中…</span></div>
+          <h1><span class="neon">元旦快乐</span> 🎆<br/>愿你<span class="neon">一路生花</span></h1>
+          <p class="sub" id="subtitle">
+            新的一年，把烦恼清零，把好运拉满。愿你所求皆如愿，所行皆坦途。
+          </p>
+
+          <div class="count" aria-label="countdown">
+            <div class="pill"><b id="d">--</b><span>天</span></div>
+            <div class="pill"><b id="h">--</b><span>时</span></div>
+            <div class="pill"><b id="m">--</b><span>分</span></div>
+            <div class="pill"><b id="s">--</b><span>秒</span></div>
+          </div>
+
+          <div class="actions">
+            <button id="boomBtn">点我放烟花</button>
+            <button class="ghost" id="copyBtn">复制祝福文案</button>
+            <button class="ghost" id="musicBtn">开启氛围音</button>
+          </div>
+          <div class="hint">提示：点击任意位置也会放烟花；手机端触摸同样支持。</div>
+        </div>
+
+        <div class="right">
+          <p class="wish" id="wishText">
+            ✨ 愿你在新的一年：<br/>
+            • 事业顺风顺水，项目一次上线成功<br/>
+            • 家人平安喜乐，日子越过越甜<br/>
+            • 账单越来越少，存款越来越多<br/>
+            • 所爱在侧，所愿成真
+          </p>
+          <div class="sig">
+            <span>—</span>
+            <span id="sigText">送给你的一份新年好运</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== Utils ======
+    const $ = (id)=>document.getElementById(id);
+    const rand = (a,b)=>Math.random()*(b-a)+a;
+    const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+
+    // ====== Date / Countdown (Tokyo time) ======
+    // Using local browser time; set target to next Jan 1 00:00
+    function getNextJan1(){
+      const now = new Date();
+      const year = now.getFullYear();
+      const jan1ThisYear = new Date(year, 0, 1, 0, 0, 0, 0);
+      if(now < jan1ThisYear) return jan1ThisYear;
+      return new Date(year+1, 0, 1, 0, 0, 0, 0);
+    }
+
+    const target = getNextJan1();
+    function pad2(n){return String(n).padStart(2,"0");}
+
+    function updateCountdown(){
+      const now = new Date();
+      const diff = target - now;
+
+      // Display text
+      const y = target.getFullYear();
+      const isNewYear = (now.getMonth()===0 && now.getDate()===1);
+
+      $("todayText").textContent = isNewYear
+        ? `今天是 ${now.getFullYear()} 年 1 月 1 日（元旦）`
+        : `距离 ${y} 年 1 月 1 日 00:00 还有`;
+
+      if(diff <= 0){
+        $("d").textContent = "00";
+        $("h").textContent = "00";
+        $("m").textContent = "00";
+        $("s").textContent = "00";
+        $("subtitle").textContent = "新年的第一束光已经到达：祝你新年快乐，万事胜意！";
+        // Burst fireworks a bit
+        if(!updateCountdown._done){
+          updateCountdown._done = true;
+          for(let i=0;i<8;i++) setTimeout(()=>spawnFirework(rand(0.2,0.8)*fwW, rand(0.2,0.6)*fwH, true), i*180);
+        }
+        return;
+      }
+
+      const total = Math.floor(diff/1000);
+      const days = Math.floor(total / 86400);
+      const hrs = Math.floor((total % 86400) / 3600);
+      const mins = Math.floor((total % 3600) / 60);
+      const secs = total % 60;
+
+      $("d").textContent = pad2(days);
+      $("h").textContent = pad2(hrs);
+      $("m").textContent = pad2(mins);
+      $("s").textContent = pad2(secs);
+    }
+    setInterval(updateCountdown, 250);
+    updateCountdown();
+
+    // ====== Sparkles DOM (lightweight) ======
+    const sparkCount = 18;
+    for(let i=0;i<sparkCount;i++){
+      const el = document.createElement("div");
+      el.className = "spark";
+      el.style.left = rand(0,100)+"vw";
+      el.style.top  = rand(50,110)+"vh";
+      el.style.animationDuration = rand(6,14)+"s";
+      el.style.animationDelay = rand(0,6)+"s";
+      el.style.opacity = rand(.45,.9);
+      el.style.transform = `scale(${rand(.7,1.4)})`;
+      document.body.appendChild(el);
+    }
+
+    // ====== Stars Canvas ======
+    const starCanvas = $("stars");
+    const starCtx = starCanvas.getContext("2d");
+    let stW=0, stH=0, stars=[];
+
+    function resizeStars(){
+      stW = starCanvas.width = Math.floor(innerWidth * devicePixelRatio);
+      stH = starCanvas.height= Math.floor(innerHeight* devicePixelRatio);
+      stars = Array.from({length: Math.floor(clamp(innerWidth/6, 120, 360))}, ()=>({
+        x: Math.random()*stW,
+        y: Math.random()*stH,
+        r: rand(0.6, 1.8)*devicePixelRatio,
+        a: rand(0.15, 0.9),
+        tw: rand(0.002, 0.012),
+        sp: rand(0.02, 0.12)*devicePixelRatio
+      }));
+    }
+    resizeStars();
+
+    function drawStars(){
+      starCtx.clearRect(0,0,stW,stH);
+      for(const s of stars){
+        s.y += s.sp;
+        if(s.y > stH) { s.y = -20*devicePixelRatio; s.x = Math.random()*stW; }
+        s.a += (Math.random()-.5)*s.tw;
+        s.a = clamp(s.a, 0.08, 0.95);
+        starCtx.beginPath();
+        starCtx.globalAlpha = s.a;
+        starCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        starCtx.fillStyle = "#ffffff";
+        starCtx.fill();
+      }
+      starCtx.globalAlpha = 1;
+      requestAnimationFrame(drawStars);
+    }
+    requestAnimationFrame(drawStars);
+
+    // ====== Fireworks Canvas ======
+    const fwCanvas = $("fireworks");
+    const fwCtx = fwCanvas.getContext("2d");
+    let fwW=0, fwH=0;
+
+    function resizeFW(){
+      fwW = fwCanvas.width = Math.floor(innerWidth * devicePixelRatio);
+      fwH = fwCanvas.height= Math.floor(innerHeight* devicePixelRatio);
+    }
+    resizeFW();
+
+    const particles = [];
+    function spawnFirework(x,y, grand=false){
+      const count = grand ? 140 : 90;
+      const baseSpeed = grand ? 6.6 : 5.2;
+      const hue = rand(180, 330); // cool-to-pink
+      for(let i=0;i<count;i++){
+        const ang = (Math.PI*2) * (i/count) + rand(-0.02,0.02);
+        const sp = baseSpeed * rand(0.45, 1.2) * devicePixelRatio;
+        particles.push({
+          x,y,
+          vx: Math.cos(ang)*sp,
+          vy: Math.sin(ang)*sp,
+          life: rand(42, 68),
+          max: 0,
+          g: 0.14*devicePixelRatio,
+          drag: 0.985,
+          hue: hue + rand(-16, 16),
+          a: 1,
+          r: rand(1.2, 2.4)*devicePixelRatio
+        });
+      }
+      // center flash
+      particles.push({
+        x,y,vx:0,vy:0, life:10, max:0, g:0, drag:1,
+        hue: hue, a:1, r: rand(10,18)*devicePixelRatio, flash:true
+      });
+    }
+
+    function tickFireworks(){
+      fwCtx.clearRect(0,0,fwW,fwH);
+      fwCtx.globalCompositeOperation = "lighter";
+
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.life--;
+        if(p.life<=0){particles.splice(i,1); continue;}
+        if(!p.flash){
+          p.vx *= p.drag;
+          p.vy = p.vy*p.drag + p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a = clamp(p.life/70, 0, 1);
+          // draw
+          fwCtx.beginPath();
+          fwCtx.globalAlpha = p.a;
+          fwCtx.fillStyle = `hsla(${p.hue}, 95%, 65%, ${p.a})`;
+          fwCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          fwCtx.fill();
+        }else{
+          const alpha = p.life/10;
+          fwCtx.globalAlpha = alpha;
+          fwCtx.beginPath();
+          fwCtx.fillStyle = `hsla(${p.hue}, 95%, 70%, ${alpha})`;
+          fwCtx.arc(p.x, p.y, p.r*(1.2-alpha), 0, Math.PI*2);
+          fwCtx.fill();
+        }
+      }
+      fwCtx.globalAlpha = 1;
+      fwCtx.globalCompositeOperation = "source-over";
+      requestAnimationFrame(tickFireworks);
+    }
+    requestAnimationFrame(tickFireworks);
+
+    // auto fireworks (gentle)
+    setInterval(()=>{
+      const x = rand(0.12, 0.88)*fwW;
+      const y = rand(0.16, 0.58)*fwH;
+      spawnFirework(x,y,false);
+    }, 1100);
+
+    // click/tap fireworks
+    function boomAt(clientX, clientY){
+      const rect = fwCanvas.getBoundingClientRect();
+      const x = (clientX - rect.left) * devicePixelRatio;
+      const y = (clientY - rect.top)  * devicePixelRatio;
+      spawnFirework(x,y,true);
+    }
+    window.addEventListener("pointerdown", (e)=>{
+      boomAt(e.clientX, e.clientY);
+    }, {passive:true});
+
+    $("boomBtn").addEventListener("click", (e)=>{
+      e.stopPropagation();
+      spawnFirework(rand(0.2,0.8)*fwW, rand(0.18,0.55)*fwH, true);
+    });
+
+    // ====== Copy blessing ======
+    const copyText =
+`元旦快乐！✨
+愿你新的一年：好运常在，烦恼清零；
+所求皆如愿，所行皆坦途；
+事业顺利，家人安康，财运满满！`;
+
+    $("copyBtn").addEventListener("click", async (e)=>{
+      e.stopPropagation();
+      try{
+        await navigator.clipboard.writeText(copyText);
+        $("sigText").textContent = "✅ 祝福文案已复制，快去发朋友圈/群里！";
+        setTimeout(()=>$("sigText").textContent="送给你的一份新年好运", 1800);
+      }catch(err){
+        $("sigText").textContent = "复制失败：浏览器不支持剪贴板权限";
+        setTimeout(()=>$("sigText").textContent="送给你的一份新年好运", 1800);
+      }
+    });
+
+    // ====== Simple ambience sound (WebAudio, no file) ======
+    let audioOn=false, ctx=null, osc=null, gain=null, noise=null, noiseGain=null;
+
+    function startAudio(){
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      gain = ctx.createGain();
+      gain.gain.value = 0.06;
+      gain.connect(ctx.destination);
+
+      osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = 220;
+      const lfo = ctx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.value = 0.12;
+
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 22;
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+
+      // gentle noise for sparkle
+      const bufferSize = 2*ctx.sampleRate;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for(let i=0;i<bufferSize;i++) data[i] = (Math.random()*2-1)*0.35;
+
+      noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      noiseGain = ctx.createGain();
+      noiseGain.gain.value = 0.012;
+
+      noise.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      osc.connect(gain);
+      osc.start();
+      lfo.start();
+      noise.start();
+    }
+
+    function stopAudio(){
+      try{ osc && osc.stop(); }catch(e){}
+      try{ noise && noise.stop(); }catch(e){}
+      ctx && ctx.close();
+      ctx=null; osc=null; gain=null; noise=null; noiseGain=null;
+    }
+
+    $("musicBtn").addEventListener("click", async (e)=>{
+      e.stopPropagation();
+      audioOn = !audioOn;
+      if(audioOn){
+        try{
+          startAudio();
+          $("musicBtn").textContent = "关闭氛围音";
+          $("sigText").textContent = "🎧 氛围音已开启（可再次点击关闭）";
+          setTimeout(()=>$("sigText").textContent="送给你的一份新年好运", 1800);
+        }catch(err){
+          audioOn=false;
+          $("sigText").textContent = "音频启动失败（可能被浏览器限制）";
+          setTimeout(()=>$("sigText").textContent="送给你的一份新年好运", 1800);
+        }
+      }else{
+        stopAudio();
+        $("musicBtn").textContent = "开启氛围音";
+      }
+    });
+
+    // ====== Resize ======
+    window.addEventListener("resize", ()=>{
+      resizeStars();
+      resizeFW();
+    });
+
+  </script>
+</body>
+</html>
